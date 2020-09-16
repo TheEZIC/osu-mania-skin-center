@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mania skin center</title>
     <link rel="stylesheet" href="index.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css" rel="stylesheet"></link>
 </head>
 <body>
     <h1 class="title">Osu!mania skin center</h1>
@@ -14,10 +15,20 @@
         <input type="file" name="skin.ini" id="fileInput">
     </label>
 
-    <div class="inputs">
+    <select id="resolutions"></select>
+
+    <div class="inputs" id="inputs">
         <input type="text" class="inputs__item" placeholder="Ingame resolution width" id="width">
         <input type="text" class="inputs__item" placeholder="Ingame resolution height" id="height">
         <!-- <input type="text" class="inputs__item" placeholder="Comma-separated keymodes (empty = all)"> -->
+    </div>
+
+    <div class="exclusive-resolution">
+        <label class="custom-checkbox">
+            <input type="checkbox" id="toggler">
+            <span>✔</span>
+        </label>
+        <span>Exclusive resolution</span>
     </div>
 
     <button class="start" id="start">Start!</button>

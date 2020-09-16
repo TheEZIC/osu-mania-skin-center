@@ -1,0 +1,39 @@
+{
+    "data": [
+        {
+            "placeholder": true,
+            "text": "Select your osu! resolution",
+            "value": ""
+        },
+        {
+            "label": "Standart",
+            "options": [
+                {"text": "800x600", "value": ""},
+                {"text": "1024x768", "value": ""},
+                {"text": "1152x864", "value": ""},
+                {"text": "1280x1024", "value": ""}
+            ]
+        },
+        {
+            "label": "Widescreen",
+            "options": [
+                {"text": "1024x600", "value": ""},
+                {"text": "1176x664", "value": ""},
+                {"text": "1280x768", "value": ""},
+                {"text": "1280x800", "value": ""},
+                {"text": "1360x768", "value": ""},
+                {"text": "1366x768", "value": ""},
+                {"text": "1440x900", "value": ""},
+                {"text": "1600x900", "value": ""},
+                {"text": "1600x1024", "value": ""},
+                {"text": "1680x1050", "value": ""},
+                {"text": "1768x992", "value": ""},
+                {"text": "1920x1080", "value": ""},
+                {"text": "1920x1200", "value": ""},
+                {"text": "2560x1440", "value": ""},
+                {"text": "4096x2160", "value": ""},
+                {"text": "7680x4320", "value": ""}
+            ]
+        }
+    ]
+}

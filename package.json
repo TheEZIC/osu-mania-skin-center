@@ -13,6 +13,7 @@
     "browserify": "^16.5.2",
     "gulp": "^4.0.2",
     "gulp-sass": "^4.1.0",
+    "slim-select": "^1.26.0",
     "vinyl-source-stream": "^2.0.0"
   }
 }

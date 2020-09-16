@@ -1,5 +1,5 @@
-const fs = require('fs');
-
+const SlimSelect = require('slim-select');
+const { data } = require('../resolutions.json');
 const Editor = require('./editor');
 const Parser = require('./parser');
 
@@ -7,6 +7,9 @@ class Main {
     constructor() {
         const dragAndDropArea = document.getElementById('dragAndDrop');
         const fileInput = document.getElementById('fileInput');
+        const resolutions = document.getElementById('resolutions');
+        const inputs = document.getElementById('inputs');
+        const toggler = document.getElementById('toggler'); 
         const width = document.getElementById('width');
         const height = document.getElementById('height');
         const start = document.getElementById('start');
@@ -22,6 +25,21 @@ class Main {
 
         [width, height].forEach(e => e.addEventListener('change', () => this.updateRatio()));
         start.addEventListener('click', () => this.createSkinIni());
+
+        new SlimSelect({ select: resolutions, data });
+
+        const resolutions2 = document.querySelector('.ss-main'); 
+
+        resolutions.addEventListener('change', evt => this.updateSelectRatio(evt.target.value));
+        toggler.addEventListener('change', evt => {
+            if (evt.target.checked) {
+                resolutions2.style.display = 'none';
+                inputs.style.display = 'flex';
+            } else {
+                resolutions2.style.display = 'flex';
+                inputs.style.display = 'none';
+            }
+        })
     }
 
     processFile(file) {
@@ -40,6 +58,12 @@ class Main {
         const width = document.getElementById('width').innerHTML;
         const height = document.getElementById('height').innerHTML;
         this.ratio = width / height;
+    }
+
+    updateSelectRatio(value) {
+        let [width, height] = value.split('x');
+        this.ratio = width / height;
+        console.log(this.ratio)
     }
 
     createSkinIni() {

@@ -9,6 +9,7 @@ module.exports = class Editor {
                 const { ColumnWidth, ColumnLineWidth } = parsed[header];
                 const columnWidthSum = this.calcSum(ColumnWidth);
                 const ColumnLineWidthSum = this.calcSum(ColumnLineWidth || 0);
+                console.log(columnWidthSum, ColumnLineWidthSum, ratio)
 
                 parsed[header].ColumnStart = Math.floor((480 * ratio - (columnWidthSum + ColumnLineWidthSum)) / 2);
             }

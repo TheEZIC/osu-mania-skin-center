@@ -9,6 +9,7 @@ module.exports = class Parser {
         let maniaNumber = 0;
 
         skin.split('\n').forEach(row => {
+            if(row.trim().startsWith('//')) return null;
             const header = this.getHeader(row);
 
             if (header) return this.header = header;

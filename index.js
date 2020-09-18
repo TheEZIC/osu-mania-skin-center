@@ -33,8 +33,9 @@ module.exports={
                 {"text": "1768x992", "value": ""},
                 {"text": "1920x1080", "value": ""},
                 {"text": "1920x1200", "value": ""},
-                {"text": "2560x1440", "value": ""}
-                
+                {"text": "2560x1440", "value": ""},
+                {"text": "4096x2160", "value": ""},
+                {"text": "7680x4320", "value": ""}
             ]
         }
     ]
@@ -51,6 +52,7 @@ module.exports = class Editor {
                 const { ColumnWidth, ColumnLineWidth } = parsed[header];
                 const columnWidthSum = this.calcSum(ColumnWidth);
                 const ColumnLineWidthSum = this.calcSum(ColumnLineWidth || 0);
+                console.log(columnWidthSum, ColumnLineWidthSum, ratio)
 
                 parsed[header].ColumnStart = Math.floor((480 * ratio - (columnWidthSum + ColumnLineWidthSum)) / 2);
             }
@@ -74,34 +76,46 @@ const { data } = require('../resolutions.json');
 const Editor = require('./editor');
 const Parser = require('./parser');
 
+const dragAndDropArea = document.getElementById('dragAndDrop');
+const fileInput = document.getElementById('fileInput');
+const resolutions = document.getElementById('resolutions');
+const inputs = document.getElementById('inputs');
+const toggler = document.getElementById('toggler'); 
+const width = document.getElementById('width');
+const height = document.getElementById('height');
+const start = document.getElementById('start');
+
+new SlimSelect({ select: resolutions, data });
+        
+const resolutions2 = document.querySelector('.ss-main');
+
 class Main {
     constructor() {
-        const dragAndDropArea = document.getElementById('dragAndDrop');
-        const fileInput = document.getElementById('fileInput');
-        const resolutions = document.getElementById('resolutions');
-        const inputs = document.getElementById('inputs');
-        const toggler = document.getElementById('toggler'); 
-        const width = document.getElementById('width');
-        const height = document.getElementById('height');
-        const start = document.getElementById('start');
-
         dragAndDropArea.addEventListener('dragover', evt => evt.preventDefault());
         dragAndDropArea.addEventListener('drop', evt => {
             evt.preventDefault();
             let { files } = evt.dataTransfer;
-            this.processFile(files[0]);
+            this.file = files[0];
+            this.processFile();
         }, false)
 
-        fileInput.addEventListener('change', () => this.processFile(fileInput.files[0]));
+        fileInput.addEventListener('change', () => {
+            this.file = fileInput.files[0];
+            this.processFile();
+        });
 
-        [width, height].forEach(e => e.addEventListener('change', () => this.updateRatio()));
+        [width, height].forEach(e => e.addEventListener('change', () => {
+            this.updateRatio();
+            this.processFile();
+        }));
+
         start.addEventListener('click', () => this.createSkinIni());
 
-        new SlimSelect({ select: resolutions, data });
+        resolutions.addEventListener('change', evt => {
+            this.updateSelectRatio(evt.target.value);
+            this.processFile();
+        });
 
-        const resolutions2 = document.querySelector('.ss-main'); 
-
-        resolutions.addEventListener('change', evt => this.updateSelectRatio(evt.target.value));
         toggler.addEventListener('change', evt => {
             if (evt.target.checked) {
                 resolutions2.style.display = 'none';
@@ -110,12 +124,12 @@ class Main {
                 resolutions2.style.display = 'flex';
                 inputs.style.display = 'none';
             }
-        })
+        });
     }
 
-    processFile(file) {
+    processFile() {
         const FR = new FileReader();
-        FR.readAsText(file);
+        FR.readAsText(this.file);
         FR.addEventListener('loadend', () => {
             const parsed = new Parser(FR.result);
             const edited = new Editor(parsed, this.ratio);
@@ -126,15 +140,12 @@ class Main {
     }
 
     updateRatio() {
-        const width = document.getElementById('width').innerHTML;
-        const height = document.getElementById('height').innerHTML;
-        this.ratio = width / height;
+        this.ratio = width.value / height.value;
     }
 
     updateSelectRatio(value) {
-        let [width, height] = value.split('x');
-        this.ratio = width / height;
-        console.log(this.ratio)
+        let [w, h] = value.split('x');
+        this.ratio = w / h;
     }
 
     createSkinIni() {
@@ -174,6 +185,7 @@ module.exports = class Parser {
         let maniaNumber = 0;
 
         skin.split('\n').forEach(row => {
+            if(row.trim().startsWith('//')) return null;
             const header = this.getHeader(row);
 
             if (header) return this.header = header;
